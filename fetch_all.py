@@ -45,12 +45,10 @@ def parse(campus, department, result):
             sln = pre.find('a').text
             description = pre.text.strip()
             if 'OFFERED VIA REMOTE LEARNING' not in description:
-                sections.append(
-                    {
-                        'sln': sln,
-                        'description': re.sub(r'\s+', ' ', description)
-                    }
-                )
+                sections.append({
+                    'sln': sln,
+                    'description': re.sub(r'\s+', ' ', description)
+                })
         else:
             if current_class and sections:
                 result.append({
