@@ -2,9 +2,8 @@ import json
 import csv
 
 
-with open('in_person.json') as f:
-    with open('in_person.csv', 'w') as csvfile:
-        courses = json.load(f)
+def export(courses, file='in_person'):
+    with open(f'{file}.csv', 'w') as csvfile:
         writer = csv.writer(csvfile)
         for course in courses:
             segments = course['class'].split(' ')
@@ -15,4 +14,14 @@ with open('in_person.json') as f:
                     dept, num, course['name'], course['gen_ed_req'],
                     section['sln'], section['description']
                 ])
-        print('Converted')
+
+
+def convert(file='in_person'):
+    with open(f'{file}.json') as f:
+        courses = json.load(f)
+        export(courses, file)
+        print(f'Converted {file}.json ')
+
+
+if __name__ == '__main__':
+    convert()

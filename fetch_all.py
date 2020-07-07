@@ -8,15 +8,14 @@ def main():
     campus = ''  # Seattle
     # campus = '/B'  # Bothell
     # campus = '/T'  # Tacoma
-
-    result = list()
-    parse_campus('', result)
+    result = parse_campus(campus)
     with open('in_person.json', 'w') as fp:
         json.dump(result, fp)
         print(f'Exported {len(result)} Courses/Sections')
 
 
-def parse_campus(campus, result):
+def parse_campus(campus='', verbose=False):
+    result = list()
     url = f'https://www.washington.edu/students/timeschd{campus}/AUT2020/'
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html5lib')  # Handle broken HTML
@@ -28,8 +27,10 @@ def parse_campus(campus, result):
         except:
             pass
     for department in departments:
-        print(f'Processing {department}')
+        if verbose:
+            print(f'Processing {department}')
         parse(campus, department, result)
+    return result
 
 
 def parse(campus, department, result):
@@ -55,7 +56,7 @@ def parse(campus, department, result):
                 result.append({
                     'class': current_class,
                     'name': current_name,
-                    'gen_ed_req' : current_gen_ed_req,
+                    'gen_ed_req': current_gen_ed_req,
                     'sections': sections
                 })
             sections = []
@@ -68,7 +69,8 @@ def parse(campus, department, result):
                     if re.match("\(", b.text):
                         if re.search("C|DIV|I&S|NW|QSR|VLPA|W", b.text):
                             current_gen_ed_req = b.text[1:-1]
-                print(f'    Parsing {current_class} {current_name} {current_gen_ed_req}')
+                print(
+                    f'    Parsing {current_class} {current_name} {current_gen_ed_req}')
 
 
 if __name__ == '__main__':
