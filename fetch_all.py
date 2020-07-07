@@ -76,6 +76,13 @@ def parse(campus, department, result):
                     current_gen_ed_req = current_gen_ed_req[1:-1]
                 print(
                     f'    Parsing {current_class} {current_name} {current_gen_ed_req}')
+    if current_class and sections:
+        result.append({
+            'class': current_class,
+            'name': current_name,
+            'gen_ed_req': current_gen_ed_req,
+            'credit': current_credit
+        })
 
 
 if __name__ == '__main__':
