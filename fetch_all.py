@@ -13,7 +13,7 @@ def main():
     parse_campus('', result)
     with open('in_person.json', 'w') as fp:
         json.dump(result, fp)
-        print(f'Exported {len(result)} Departments')
+        print(f'Exported {len(result)} Courses/Sections')
 
 
 def parse_campus(campus, result):
@@ -21,7 +21,7 @@ def parse_campus(campus, result):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html5lib')  # Handle broken HTML
     departments = set()
-    for a in soup.find("div", 'uw-body').find_all('a'):
+    for a in soup.find('div', 'uw-body').find_all('a'):
         try:
             if a['href'].endswith('.html') and '/' not in a['href']:
                 departments.add(a['href'])
@@ -36,8 +36,8 @@ def parse(campus, department, result):
     r = requests.get(
         f'https://www.washington.edu/students/timeschd{campus}/AUT2020/{department}')
     soup = BeautifulSoup(r.text, 'html.parser')
-    current_class = ""
-    current_name = ""
+    current_class = ''
+    current_name = ''
     sections = []
     for table in soup.find_all('table'):
         pre = table.find('pre')
