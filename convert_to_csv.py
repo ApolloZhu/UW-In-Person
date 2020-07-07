@@ -12,7 +12,7 @@ with open('in_person.json') as f:
             num = segments[-1]
             for section in course['sections']:
                 writer.writerow([
-                    dept, num, course['name'],
+                    dept, num, course['name'], course['gen_ed_req'],
                     section['sln'], section['description']
                 ])
         print('Converted')
