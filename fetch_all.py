@@ -37,41 +37,43 @@ def parse(campus, department, result):
     r = requests.get(
         f'https://www.washington.edu/students/timeschd{campus}/AUT2020/{department}')
     soup = BeautifulSoup(r.text, 'html.parser')
+
     current_class = ''
     current_name = ''
     current_gen_ed_req = ''
+    current_credit = ''
     sections = []
+
     for table in soup.find_all('table'):
         pre = table.find('pre')
         if pre:
             sln = pre.find('a').text
-            description = pre.text.strip()
-            if 'OFFERED VIA REMOTE LEARNING' not in description:
-                sections.append({
-                    'sln': sln,
-                    'description': re.sub(r'\s+', ' ', description)
-                })
+            if len(sln) == 5:
+                contents = pre.contents
+                credit = contents[2][4:12].strip()
+                if not current_credit:
+                    current_credit = credit
+                description = pre.text.strip()
+                if 'OFFERED VIA REMOTE LEARNING' not in description:
+                    sections.append(sln)
         else:
             if current_class and sections:
                 result.append({
                     'class': current_class,
                     'name': current_name,
                     'gen_ed_req': current_gen_ed_req,
-                    'sections': sections
+                    'credit': current_credit
                 })
+            current_credit = ''
             sections = []
 
             links = table.find_all('a')
             if len(links) == 2:
                 current_class = re.sub(r'\s+', ' ', links[0].text).strip()
                 current_name = links[1].text
-                gen_eds = table.find_all('b')
-                for b in gen_eds:
-                    if re.match("\(", b.text):
-                        if re.search("C|DIV|I&S|NW|QSR|VLPA|W", b.text):
-                            current_gen_ed_req = b.text[1:-1]
-                else:
-                    current_gen_ed_req = ''
+                current_gen_ed_req = table.find_all('td')[1].text
+                if current_gen_ed_req:
+                    current_gen_ed_req = current_gen_ed_req[1:-1]
                 print(
                     f'    Parsing {current_class} {current_name} {current_gen_ed_req}')
 
