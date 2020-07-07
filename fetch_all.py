@@ -38,6 +38,7 @@ def parse(campus, department, result):
     soup = BeautifulSoup(r.text, 'html.parser')
     current_class = ''
     current_name = ''
+    current_gen_ed_req = ''
     sections = []
     for table in soup.find_all('table'):
         pre = table.find('pre')
@@ -54,6 +55,7 @@ def parse(campus, department, result):
                 result.append({
                     'class': current_class,
                     'name': current_name,
+                    'gen_ed_req' : current_gen_ed_req,
                     'sections': sections
                 })
             sections = []
@@ -61,7 +63,12 @@ def parse(campus, department, result):
             if len(links) == 2:
                 current_class = re.sub(r'\s+', ' ', links[0].text).strip()
                 current_name = links[1].text
-                print(f'    Parsing {current_class} {current_name}')
+                gen_eds = table.find_all('b')
+                for b in gen_eds:
+                    if re.match("\(", b.text):
+                        if re.search("C|DIV|I&S|NW|QSR|VLPA|W", b.text):
+                            current_gen_ed_req = b.text[1:-1]
+                print(f'    Parsing {current_class} {current_name} {current_gen_ed_req}')
 
 
 if __name__ == '__main__':
