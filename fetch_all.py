@@ -60,6 +60,7 @@ def parse(campus, department, result):
                     'sections': sections
                 })
             sections = []
+
             links = table.find_all('a')
             if len(links) == 2:
                 current_class = re.sub(r'\s+', ' ', links[0].text).strip()
@@ -69,6 +70,8 @@ def parse(campus, department, result):
                     if re.match("\(", b.text):
                         if re.search("C|DIV|I&S|NW|QSR|VLPA|W", b.text):
                             current_gen_ed_req = b.text[1:-1]
+                else:
+                    current_gen_ed_req = ''
                 print(
                     f'    Parsing {current_class} {current_name} {current_gen_ed_req}')
 
