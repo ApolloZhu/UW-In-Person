@@ -5,6 +5,8 @@ import csv
 def export(courses, file='in_person'):
     with open(f'{file}.csv', 'w') as csvfile:
         writer = csv.writer(csvfile)
+        writer.writerow(['dept', 'num', 'name', 'gen_ed_req',
+                    'section', 'sln', 'enrollment', 'status', 'description'])
         for course in courses:
             segments = course['class'].split(' ')
             dept = ' '.join(segments[:-1])
@@ -12,7 +14,9 @@ def export(courses, file='in_person'):
             for section in course['sections']:
                 writer.writerow([
                     dept, num, course['name'], course['gen_ed_req'],
-                    section['sln'], section['description']
+                    section['section'], section['sln'], section['enrollment'],
+                    section['status'], section['description'],
+                    
                 ])
 
 

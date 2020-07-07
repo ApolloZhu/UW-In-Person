@@ -47,9 +47,25 @@ def parse(campus, department, result):
             sln = pre.find('a').text
             description = pre.text.strip()
             if 'OFFERED VIA REMOTE LEARNING' not in description:
+                if re.search('\d+', sln):
+                    description = re.sub(sln, '', description)
+                status = re.search('Open|Closed|Restr|>', description).group()
+                description = re.sub(status, '', description)
+                status = 'Entry Code Required' if status == '>' else status
+                status = 'Restrictions Apply' if status == 'Restr' else status
+                enrollment = re.search(r'\d+/\s+\d+', description)
+                enrollment = enrollment[0] if enrollment else ''
+                description = re.sub(enrollment, '', description)
+                enrollment = re.sub(r'/\s+', '/', enrollment)
+                section = re.search(r'[A-Z]+', description)
+                section = section[0] if section else ''
+                description = re.sub(section, '', description, 1)
                 sections.append({
                     'sln': sln,
-                    'description': re.sub(r'\s+', ' ', description)
+                    'section': section,
+                    'description': re.sub(r'\s+', ' ', description),
+                    'status': status,
+                    'enrollment': enrollment
                 })
         else:
             if current_class and sections:
