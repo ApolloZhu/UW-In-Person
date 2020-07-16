@@ -4,10 +4,6 @@
 
 Potential classes offered in person at University of Washington for Autumn 2020.
 
-## Public Service Annoucement
+## OwO What's This
 
-As stated in the new UW [presidential address](https://www.washington.edu/president/2020/07/07/rule-ends-visa-waiver/):
-
-> if the virus resurges in Washington and we have to return to remote-only instruction, or if case counts aren’t reduced enough to let us go to [Phase 3](https://www.washington.edu/coronavirus/status/#accordion1_tab4) in this region in time for autumn quarter, then international students could have their lives upended for no reason.
-
-therefore, you're not gauranteed to be able to stay in United States even if you register for in-person classes.
+ICE originally annouced a new policy requireing all F/M visa students to take some in-person classe(s) as UW is using a hybrid approach. The policy is now rescinded, hence I'm archiving this repository. You can contact me at zhuzhiyu@uw.edu if there's any change you want me to merge, or you could just maintain a fork of this project.
